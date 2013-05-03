@@ -1,0 +1,333 @@
+/* ThinIce for GTK3 */
+@define-color white     #ffffff;
+@define-color black     #000000;
+@define-color dimgray   #747474;
+@define-color inset     #c1c1cc;
+@define-color outset    #d3d3dd;
+@define-color canvas    #e5e5f7;
+@define-color selection #336699;
+
+@define-color tooltip   #eee1b3;
+
+* {
+	engine: thickice;
+
+	border: 1px none darker(@outset);
+
+	-GtkRange-slider-width: 11px;
+	-GtkRange-stepper-size: 11px;
+	-GtkComboBox-arrow-size: 6px;
+	-GtkCellRendererToggle-indicator-size: 9px; /* does not seem to work; oh well... */
+	-GtkCheckMenuItem-indicator-size: 9px;
+	-GtkCheckButton-indicator-size: 9px;
+}
+
+:selected, .entry:selected {
+	color: @white;
+	background: @dimgray;
+}
+
+:selected:focused {
+	color: @white;
+	background: @selection;
+}
+
+:insensitive {
+	color: @dimgray;
+	background: @outset;
+	text-shadow: 1px 1px @white;
+}
+
+GtkWindow, GtkDrawingArea {
+	color: @black;
+	background: @outset;
+}
+
+.separator, .menuitem.separator {
+	color: @outset;
+	padding: 4px;
+}
+
+/* paned */
+GtkPaned {
+	background: @outset;
+	-thickice-handle-dots: 5;
+}
+
+/* entry */
+.entry {
+	color: @black;
+	background: @canvas;
+	border-style: inset;
+	padding: 3px;
+}
+
+.entry:insensitive {
+	color: @dimgray;
+	background: @canvas;
+}
+
+.button.spinbutton:insensitive {
+	color: @dimgray;
+	background: @outset;
+}
+
+/* check and radio */
+.check, .radio,
+.cell.check, .cell.radio,
+.menuitem.check, .menuitem.radio {
+	background: @outset;
+	border-style: outset;
+}
+
+.menuitem.check:hover,
+.menuitem.radio:hover {
+	border-color: darker(@selection);
+}
+
+.check:insensitive, .check:active:insensitive,
+.radio:insensitive, .radio:active:insensitive {
+	border-style: solid;
+}
+
+GtkCheckButton:hover, GtkCheckButton:selected:focused,
+GtkRadioButton:hover, GtkRadioButton:selected:focused {
+	color: @black;
+	background: @canvas;
+}
+
+GtkCheckButton.radio:selected:focused,
+GtkRadioButton.check:selected:focused {
+	border-style: outset;
+	background: @inset;
+}
+
+.radio:selected:focused:active {
+	border-style: inset;
+}
+
+.check:active, .radio:active,
+.menuitem.check:active, .menuitem.radio:active {
+	background: @inset;
+	border-style: inset;
+}
+
+/* view */
+.view {
+	color: @black;
+	background: @canvas;
+}
+
+row:nth-child(odd) {
+	color: @black;
+	background: shade (@canvas, 0.93);
+}
+
+column:sorted {
+	background: shade (@canvas, 0.85);
+}
+
+column:sorted row:nth-child(odd) {
+	background: shade (@canvas, 0.8);
+}
+
+.view:selected {
+	color: @white;
+	background: @dimgray;
+}
+
+.view:selected:focused {
+	color: @white;
+	background: @selection;
+}
+
+/* buttons */
+.button {
+	color: @black;
+	background: @outset;
+	border-style: outset;
+	padding: 2px;
+	-GtkWidget-focus-padding: 2px;
+}
+
+.button:hover {
+	color: @black;
+	background: @canvas;
+}
+
+.button:active {
+	color: @black;
+	background: @inset;
+	border-style: inset;
+}
+
+/* toolbars */
+
+/* notebooks */
+.notebook {
+	border-style: outset;
+}
+
+.notebook tab {
+	color: @black;
+	background: @inset;
+	padding: 2px;
+}
+
+.notebook tab:active {
+	color: @black;
+	background: @outset;
+	padding: 3px;
+}
+
+/* frames */
+.frame {
+	border-style: solid;
+}
+
+/* menus */
+.menu {
+	border-style: outset;
+	padding: 2px;
+}
+
+.menubar {
+	border-style: outset;
+	padding: 1px;
+}
+
+.menuitem {
+	color: @black;
+	background: @outset;
+	border-style: none;
+	padding: 2px 4px;
+}
+
+.menubar > .menuitem {
+	padding: 3px 7px;
+}
+
+.menuitem:hover {
+	color: @white;
+	background-color: @selection;
+}
+
+/* toolbars */
+.toolbar {
+	border-style: outset;
+	padding: 1px;
+}
+
+/* sliders */
+.slider {
+	color: @outset;
+	background: @outset;
+	border-style: outset;
+	-thickice-chopoff: true;
+	-thickice-mark-type: slash;
+}
+
+.slider:hover {
+	color: @outset;
+	background: @canvas;
+}
+
+.trough, .cell.trough {
+	background: @inset;
+	border-style: inset;
+}
+
+.trough.left {
+	border-right-style: none;
+}
+
+.trough.right {
+	border-left-style: none;
+}
+
+.trough.top {
+	border-bottom-style: none;
+}
+
+.trough.bottom {
+	border-top-style: none;
+}
+
+/* GtkSwitch */
+GtkSwitch.slider {
+	-thickice-mark-type: dot;
+	-thickice-chopoff: false;
+}
+
+/* progress bars */
+GtkProgressBar {
+	padding: 3px;
+}
+
+.cell.trough { /* XXX: can this break anything else? */
+	padding: 2px;
+}
+
+.progressbar,
+.cell.progressbar {
+	color: @white;
+	background: @selection;
+	padding: 2px;
+}
+
+/* tooltips */
+.tooltip {
+	color: @black;
+	background-color: @tooltip;
+	border-color: @black;
+	border-style: solid;
+}
+
+/* rubberband */
+.rubberband {
+	background: alpha (@selection, 0.25);
+	border-color: @selection;
+	border-style: solid;
+}
+
+/* hax for Evolution */
+GtkHTML :selected {
+	color: @white;
+	background: @selection;
+}
+
+EMailDisplay {
+	color: @black;
+	background: @outset;
+}
+
+EMailDisplay :selected {
+	color: @white;
+	background: @selection;
+}
+
+/* I cannot eliminate the background gradient under the selected item
+ * in the email list. They hardcoded it in the Evolution source tree.
+ * Seriously, WTF?
+ *
+ * And never mind they could have just used a GtkTreeView. Common widgets
+ * exist for a reason.
+ */
+ECanvas:active {
+	color: @white;
+	background: @dimgray;
+}
+
+ECanvas:selected {
+	color: @white;
+	background: @selection;
+}
+
+/* Also, there is a GtkEventBox header there which looks completely unstylable,
+ * no matter what I do.
+ */
+
+/* hax for Nautilus */
+.nautilus-canvas-item {
+    border-radius: 5px;
+}

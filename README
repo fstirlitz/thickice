@@ -1,0 +1,48 @@
+ThickIce © 2013 felix
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU Lesser General Public License as published by the Free
+Software Foundation; either version 2.1 of the License, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for
+more details.
+
+See COPYING for details.
+
+* * * * *
+
+This is a rewrite of the ThinIce theme for GTK3, with the engine written in Vala.
+It looks nearly identical - there are a few discrepancies, but not jarring.
+GtkSwitch styling is my own invention.
+
+Original ThinIce engine: © 2003 Tim Gerla, Tomas Ögren, Richard Hult (GPLv2)
+
+* * * * *
+
+DEPENDENCIES:
+    gtk+-3.0
+    valac (unless when a ready-made .c file is used)
+
+COMPILING:
+    make
+
+    Non-GNU make has not been tested, but should work.
+
+INSTALLATION:
+    make install
+
+    For packagers: to put the installed files in a tree
+	under $PACKAGING_DIR, use
+
+    make install ROOT=$PACKAGING_DIR
+
+SOURCE TARBALL:
+    make tarball
+
+    The tarball will contain the C code, so valac will not be needed
+    by whomever unpacks it.
+
+    You will need to modify the Makefile if you use BSD tar. See inside.
