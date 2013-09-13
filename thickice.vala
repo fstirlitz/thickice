@@ -327,7 +327,29 @@ public class ThickIce: Gtk.ThemingEngine {
 			end_i = w / 2 + dots * 4;
 		}
 
-		if (width > height) {
+		// XXX: there should be a better way to detect which type
+		// of handle should be drawn than dimension sniffing.
+		// i was unable to find one however.
+		if (width == height) {
+			// XXX: this does not render pixel-for-pixel identically
+			// with ThinIce, but at least it's visible.
+
+			// i am not very proud of darkening the dark shade
+			// and lightening the light shade either.
+			render_background(cr, x, y, width, height);
+			cr.set_line_width(1);
+			for (uint i = 0; i < 3; i++) {
+				Gdk.cairo_set_source_rgba(cr, darker(dcolor));
+				cr.move_to(x + (i * 5) + 1.0, y + height + 0.0);
+				cr.line_to(x + width + 0.0, y + (i * 5) + 1.0);
+				cr.stroke();
+
+				Gdk.cairo_set_source_rgba(cr, lighter(lcolor));
+				cr.move_to(x + (i * 5), y + width);
+				cr.line_to(x + width, y + (i * 5));
+				cr.stroke();
+			}
+		} else if (width > height) {
 			for (double i = x + start_i; i < x + end_i; i += 8)
 				draw_dot(cr, lcolor, dcolor, i, y + height / 2);
 		} else {
