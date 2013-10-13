@@ -336,7 +336,14 @@ public class ThickIce: Gtk.ThemingEngine {
 
 			// i am not very proud of darkening the dark shade
 			// and lightening the light shade either.
+			cr.save();
+			cr.move_to(x + width, y);
+			cr.line_to(x, y + height);
+			cr.line_to(x + width, y + height);
+			cr.close_path();
+			cr.clip();
 			render_background(cr, x, y, width, height);
+			cr.restore();
 			cr.set_line_width(1);
 			for (uint i = 0; i < 3; i++) {
 				Gdk.cairo_set_source_rgba(cr, darker(dcolor));
