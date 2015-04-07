@@ -45,7 +45,7 @@
 	margin: 5px;
 }
 
-.window-frame.csd.popup {
+.window-frame.csd.popup, .window-frame.csd.tooltip {
 	/* Don't show the "border" around popup menus and such */
 	box-shadow: none;
 }
