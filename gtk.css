@@ -354,3 +354,9 @@ GtkButtonBox > .button {
 .spinner:active {
 	animation: spin 2s linear infinite;
 }
+
+/* workarounds */
+NautilusDesktopWindow,
+NautilusDesktopWindow GtkPaned {
+	background: none;
+}
