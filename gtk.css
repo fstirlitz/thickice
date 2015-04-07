@@ -21,53 +21,110 @@
 @define-color success_bg_color #4e9a06;
 
 * {
-	border-color: darker(@outset);
-	border-width: 1px;
-	
 	engine: thickice;
 
-	-GtkWindow-decoration-button-layout: 'icon:minimize,maximize,close';
 	-GtkRange-slider-width: 11px;
 	-GtkRange-stepper-size: 11px;
 	-GtkComboBox-arrow-size: 6px;
 	-GtkCellRendererToggle-indicator-size: 9px; /* does not seem to work; oh well... */
 	-GtkCheckMenuItem-indicator-size: 9px;
 	-GtkCheckButton-indicator-size: 9px;
+	-GtkWidget-focus-padding: 0;
+	-GtkWidget-focus-line-width: 1;
+	outline: 1px none black;
 }
 
-GtkWindow, .button, .slider {
+.window-frame.csd {
+	/* This is the only way to have any sort of border around client-side decorated windows.
+	** I kid you not.
+	*/
+	box-shadow: 0px 0px 2px 2px black;
+	/* And this is to have working resize handles. I didn't get this from GTK source code,
+	** I've found it in the Adwaita style sheet. I still have no idea how it works.
+	*/
+	margin: 5px;
+}
+
+.window-frame.csd.popup {
+	/* Don't show the "border" around popup menus and such */
+	box-shadow: none;
+}
+
+GtkPaned {
+	-thickice-handle-dots: 5;
+	/* Workaround. I need a background color for the dot-drawing routine in the engine.
+	** I will probably need to replace all of that with background-image for the next release.
+	** If I'm going to make another release, that is...
+	*/
+	background: @outset;
+}
+
+:focus {
+	outline-style: dotted;
+	outline-offset: -2px;
+}
+
+.radio, .check {         
+	outline-offset: 0px;
+}
+
+.button {
+	outline-offset: -3px;
+}
+
+.trough {
+	outline-offset: 3px;
+}
+
+tab {
+	outline-offset: 1px;
+}
+
+.view, .entry {
+	outline-width: 0px;
 	color: @black;
-	background-color: @outset;
+	background: @canvas;
 }
 
-.slider, .slider:hover {
-	color: @outset;
-	-thickice-chopoff: true;
-	-thickice-mark-type: slash;
-}
-
-.slider:insensitive {
-	color: @outset;
-	background-color: @inset;
-}
-
-GtkSwitch.slider {
-	-thickice-mark-type: dot;
-	-thickice-chopoff: false;
-}
-
-.expander, GtkTreeView.view.expander {
-	color: #fff;
-}
-
-.expander:hover,
-GtkTreeView.view.expander:selected:hover {
+.background, .popover, tab:active, .slider, .button, .check, .radio {
 	color: @black;
+	background: @outset;
 }
 
-GtkTreeView.dnd {
-	border-color: @black;
-	border-style: solid;
+.separator {
+	color: @outset;
+}
+
+.tooltip {
+	border: 1px solid black;
+	color: @black;
+	background: @tooltip;
+}
+
+tab {
+	color: @black;
+	background: @inset;
+	padding: 4px;
+}
+
+tab:active {
+	padding: 5px;
+}
+
+.header-bar {
+	padding: 4px;
+	/* Using border-bottom, because margin doesn't work. "CSS" my arse. */
+	border-bottom: 2px solid @outset;
+}
+
+.header-bar, .entry:selected:focused, .view:selected:focused {
+	color: @white;
+	background: @selection;
+}
+
+.header-bar:backdrop, .entry:selected, .view:selected {
+	color: @white;
+	background: @dimgray;
 }
 
 :insensitive {
@@ -75,706 +132,225 @@ GtkTreeView.dnd {
 	text-shadow: 1px 1px @white;
 }
 
-.entry.read-only {
-	border-color: shade (@outset, 0.7);
-	background-color: shade (@outset, 0.9);
+.frame {
+	border: 1px solid @dimgray;
 }
 
-.entry:selected {
-	color: @white;
-	background-color: @dimgray;
+.button, .check, .radio, .menuitem.check, .menuitem.radio,
+.toolbar, .menubar, .menu, .popover, .slider, .notebook {
+	border: 1px outset darker(@outset);
 }
 
-.entry:selected:focused {
-	color: @white;
-	background-color: @selection;
+.notebook.header {
+	border: none;
 }
 
-.view {
-	border-width: 0;
-	background-color: @canvas;
-	color: @black;
+.slider {
+	color: @outset;
+	-thickice-chopoff: true;
+	-thickice-mark-type: slash;
 }
 
-.view:selected {
-	color: @white;
-	background-color: @dimgray;
+GtkSwitch.slider {
+	padding: 1px;
+	-thickice-chopoff: false;
+	-thickice-mark-type: dot;
 }
 
-.view:selected:focused {
-	color: @white;
-	background-color: @selection;
-}
-
-.view row {
-	color: @black;
-	background-color: @canvas;
-}
-
-.view row:nth-child(odd) {
-	color: @black;
-	background-color: shade (@canvas, 0.93);
-}
-
-.view column:sorted row {
-	background-color: shade (@canvas, 0.85);
-}
-
-.view column:sorted row:nth-child(odd) {
-	background-color: shade (@outset, 0.8);
-}
-
-.view row:selected,
-.view column:sorted row:selected {
-	color: @white;
-	background-color: @dimgray;
-}
-
-.view row:selected:focused,
-.view column:sorted row:selected:focused {
-	color: @white;
-	background-color: @selection;
-}
-
-.view.cell.trough,
-.view.cell.trough:hover,
-.view.cell.trough:selected,
-.view.cell.trough:selected:focused {
-	background-color: @outset;
-	color: @black;
+.menu {
 	padding: 2px;
-	border-width: 1px;
-}
-
-.view.cell.progressbar,
-.view.cell.progressbar:hover,
-.view.cell.progressbar:selected,
-.view.cell.progressbar:selected:focused {
-	background-color: @selection;
-	color: @white;
-}
-
-.rubberband {
-	background-color: alpha (@selection, 0.25);
-	border-color: @selection;
-	border-style: solid;
-}
-
-.tooltip {
-	background-color: @tooltip;
-	color: @black;
-	border-color: @black;
-	border-style: solid;
-}
-
-.button, .slider {
-	border-style: outset;
-}
-
-.button {
-	padding: 2px;
-	-GtkWidget-focus-padding: 2px;
-}
-
-.button:active {
-	background-color: @inset;
-	border-style: inset;
-}
-
-.button:hover,
-.slider:hover {
-	background-color: @canvas;
-}
-
-.trough {
-	background-color: @inset;
-	border-style: inset;
-	padding: 0;
-}
-
-.trough.left {
-	border-right-style: none;
-}
-
-.trough.right {
-	border-left-style: none;
-}
-
-.trough.top {
-	border-bottom-style: none;
-}
-
-.trough.bottom {
-	border-top-style: none;
-}
-
-.entry {
-	border-style: inset;
-	background-color: @canvas;
-	color: @black;
-	padding: 3px;
-}
-
-.entry:insensitive {
-	background-color: @canvas;
-	color: @dimgray;
-}
-
-.progressbar,
-.entry.progressbar,
-.cell.progressbar {
-	color: @white;
-	background-color: @selection;
-}
-
-GtkProgressBar {
-	padding: 3px;
-}
-
-.level-bar.indicator-discrete {
-	margin: 1px;
-}
-
-.level-bar {
-	padding: 2px;
-}
-
-.level-bar.fill-block {
-	padding: 6px;
-	background-color: @selection;
-}
-
-.level-bar.fill-block.level-low {
-	background-color: @warning_bg_color;
-}
-
-.level-bar.fill-block.level-high {
-	background-color: @success_bg_color;
-}
-
-.level-bar.fill-block.empty-fill-block {
-	background-color: @white;
-}
-
-GtkCheckButton:hover,
-GtkCheckButton:selected,
-GtkRadioButton:hover,
-GtkRadioButton:selected {
-	background-color: @canvas;
-}
-
-.check, .radio,
-.cell.check, .cell.radio {
-	border-width: 1px;
-	border-style: outset;
-}
-
-.menuitem.check:hover,
-.menuitem.radio:hover {
-	border-color: darker(@selection);
-}
-
-.check, .radio,
-.cell.check, .cell.radio,
-row:nth-child(odd).cell.check, row:nth-child(odd).cell.radio,
-row:selected.cell.check, row:selected.cell.radio {
-	background-color: @outset;
-}
-
-.check:active, .radio:active,
-.cell.check:active, .cell.radio:active,
-.menuitem.check:active, .menuitem.radio:active,
-row:nth-child(odd).cell.check:active, row:nth-child(odd).cell.radio:active,
-row:selected.cell.check:active, row:selected.cell.radio:active {
-	border-style: inset;
-	background-color: @inset;
-}
-
-.check:selected:focused, .radio:selected:focused {
-	background-color: @inset;
-}
-
-.check:insensitive, .radio:insensitive {
-	border-style: solid;
 }
 
 .menuitem {
 	padding: 2px;
 }
 
-.popup {
-	border-style: outset;
+.menubar .menuitem {
+	padding: 3px 6px;
 }
 
-.notebook {
-	border-style: outset;
-}
-
-.notebook tab {
-	color: @black;
-	background: @inset;
-	padding: 2px;
-}
-
-.notebook tab:active {
-	color: @black;
-	background: @outset;
-	padding: 3px;
-}
-
-.frame {
-	border-style: solid;
-}
-
-GtkStatusbar > .frame {
-	border-style: inset;
-}
-
-GtkScrolledWindow.frame {
-	padding: 0;
-}
-
-.separator, .menuitem.separator {
-	color: @outset;
-	padding: 4px;
-}
-
-.menubar,
-.toolbar {
-	border-style: outset;
+.menubar {
 	padding: 1px;
 }
 
-.menu {
+.toolbar {
+	padding: 1px;
+}
+
+.button {
+	padding: 4px;
+}
+
+.check:insensitive, .radio:insensitive,
+.check:checked:insensitive, .radio:checked:insensitive,
+.check:hover:insensitive, .radio:hover:insensitive {
+	border-style: solid;
+}
+
+.button.flat {
+	border-style: none;
+}
+
+.button:hover, .toolbar .button:hover, .slider:hover,
+GtkCheckButton.check:hover, GtkRadioButton.radio:hover, GtkExpander:hover {
 	border-style: outset;
+	background: @canvas;
+}
+
+.menuitem.check:hover, .menuitem.radio:hover,
+.check:selected:focused, .radio:selected:focused {
+	border-color: darker(@selection);
+}
+
+.button:checked,
+.check:checked, .radio:checked,
+GtkCheckButton.check:checked, GtkRadioButton.radio:checked,
+.check:checked:selected, .radio:checked:selected,
+.check:checked:selected:focused, .radio:checked:selected:focused,
+.menuitem.check:checked, .menuitem.radio:checked {
+	border-style: inset;
+	background: @inset;
+}
+
+.button:hover:checked {
+	border-style: inset;
+}
+
+.button:active, .button.flat:active, .check:active, .radio:active {
+	background: @inset;
+}
+
+.button:active, .button.flat:active {
+	border-style: inset;
+}
+
+.entry {
+	padding: 3px;
+}
+
+.view:insensitive, .entry:insensitive {
+	color: @dimgray;
+	background: @canvas;
+}
+
+/* Workaround: GTK3 does not support :not(). "CSS" my arse.
+** And why the fuck does GtkPrintUnixDialog's vbox have the ".view" class anyway?
+**/
+.view.dialog-vbox {
+	background: none;
+}
+
+.entry, .trough {
+	border: 1px inset darker(@inset);
+}
+
+.trough, .trough:selected, .trough:selected:focused, .cell.trough:selected:focused {
+	color: @black;
+	background: @inset;
+}
+
+.cell.trough {
 	padding: 2px;
 }
 
-.menubar > .menuitem {
-	padding: 3px 7px;
+.trough.horizontal.left {
+	border-right: none;
 }
 
-.menu:hover,
-.menubar:hover,
+.trough.horizontal.right {
+	border-left: none;
+}
+
+.trough.vertical.bottom {
+	border-top: none;
+}
+
+.trough.vertical.top {
+	border-bottom: none;
+}
+
+.separator {
+	color: @outset;
+}
+
+GtkProgressBar {
+	padding: 2px;
+}
+
+.entry:selected:focused, .view:selected:focused, .progressbar, .progressbar:selected {
+	color: @white;
+	background: @selection;
+}
+
+.menuitem {
+	border: none;
+}
+
 .menuitem:hover {
 	color: @white;
-	background-color: @selection;
+	background: @selection;
 }
 
-GtkToggleButton.button:inconsistent,
-.check:inconsistent, .radio:inconsistent {
-	border-style: outset;
-	background-color: @inset;
+.rubberband {
+	background-color: alpha (@selection, 0.25);
+	border: 1px solid @selection;
 }
 
-GtkLabel:selected {
-	background-color: @dimgray;
+GtkInfoBar {
+	border: 1px outset darker(@outset);
 }
 
-GtkLabel:selected:focused {
-	background-color: @selection;
+GtkInfoBar.info {
+	color: @black;
+	background: @info_bg_color;
 }
 
-.info {
-	background-color: @info_bg_color;
-	color: @info_fg_color;
+GtkInfoBar.warning {
+	color: @black;
+	background: @warning_bg_color;
 }
 
-.warning {
-	background-color: @warning_bg_color;
-	color: @warning_fg_color;
+GtkInfoBar.question {
+	color: @black;
+	background: @question_bg_color;
 }
 
-.question {
-	background-color: @question_bg_color;
-	color: @question_fg_color;
+GtkInfoBar.error {
+	color: @black;
+	background: @error_bg_color;
 }
 
-.error {
-	background-color: @error_bg_color;
-	color: @error_fg_color;
-}
-
-.light-area-focus {
-	color: #000;
-}
-
-.dark-area-focus {
-	color: #fff;
-}
-
-GtkCalendar:selected {
-	background-color: @selection;
-	color: @white;
-}
-
-GtkCalendar:inconsistent {
-	color: @dimgray;
+GtkCalendar {
+	border: 1px inset darker(@outset);
 }
 
 GtkCalendar.header {
-	background-color: @outset;
-	border-style: outset;
-	border-width: 1px;
-}
-
-GtkCalendar.highlight {
-	background-color: @dimgray;
 	color: @white;
+	background: @selection;
 }
 
-@keyframes spinner {
-	0% { background-image: none,
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)); }
-	0% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)); }
-	8% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		none; }
-	8% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)); }
-	16% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		none,
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)); }
-	16% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)); }
-	25% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		none,
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)); }
-	25% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)); }
-	33% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		none,
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)); }
-	33% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)); }
-	41% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		none,
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)); }
-	41% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)); }
-	50% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		none,
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)); }
-	50% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)); }
-	58% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		none,
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)); }
-	58% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)); }
-	66% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		none,
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)); }
-	66% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)); }
-	75% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		none,
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)); }
-	75% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)); }
-	83% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		none,
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)); }
-	83% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)); }
-	91% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		none,
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)); }
-	91% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)); }
-	100% { background-image: none,
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)); }
-	100% { background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)); }
+:link {
+	color: blue;
 }
+
+.app-notification {
+	padding: 4px;
+	color: @black;
+	background: @info_bg_color;
+}
+
+/* I don't know why, but without this padding the bottom part of the button is not displayed in 3.14.9 */
+GtkButtonBox > .button {
+	padding: 5px;
+}
+
+@keyframes spin { to { -gtk-icon-transform: rotate(1turn); } }
 
 .spinner {
-	background-color: transparent;
-	background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent));
-	background-position: 25.00% 6.70%, 6.70% 25.00%, 0.00% 50.00%, 6.70% 75.00%, 25.00% 93.30%, 50.00% 100.00%, 75.00% 93.30%, 93.30% 75.00%, 100.00% 50.00%, 93.30% 25.00%, 75.00% 6.70%, 50.00% 0.00%;
-	background-size: 16% 16%;
-	background-repeat: no-repeat;
-	transition: background-image 500ms ease-out;
+	/* Ripped from Adwaita. This may be the only icon guaranteed to fit this purpose. */
+	-gtk-icon-source: -gtk-icontheme("process-working-symbolic");
 }
 
 .spinner:active {
-	background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
-		-gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent));
-	animation: spinner 1s infinite linear;
-}
-
-/* hax for Nautilus */
-.nautilus-canvas-item {
-	border-radius: 5px;
+	animation: spin 2s linear infinite;
 }
